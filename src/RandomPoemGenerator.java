@@ -25,11 +25,12 @@ public class RandomPoemGenerator {
     while ((line = br.readLine()) != null) {
 
         String [] lineContent = line.toLowerCase().split(": ");
+
         if (lineContent.length <= 1)  {
             throw new RuntimeException("Bad rule, expected rule format is 'ruleName: content content...'");
         }
 
-        String ruleName = lineContent[0];
+        String ruleName = lineContent[0].replaceAll("[^a-zA-Z]+", "");
 
         if (ruleName.equals("poem")) {
             poemRule = lineContent[1];
@@ -64,7 +65,7 @@ public class RandomPoemGenerator {
     static String word(String words) {
         String[] wordsList = words.split("\\|");
         int s = rand.nextInt(wordsList.length);     //get random word from the list
-        return wordsList[s] + " ";
+        return wordsList[s].replaceAll("[^a-z]+", "") + " ";
     }
 
     static void reference (String rule) {
@@ -74,22 +75,22 @@ public class RandomPoemGenerator {
 
         if (references.length > 0) {
             int s = rand.nextInt(references.length);    //get random rule reference from the list
-            ruleLookup = references[s];
+            ruleLookup = references[s].replaceAll("[^a-z]+", "");
         } else {
-            ruleLookup = rule;
+            ruleLookup = rule.replaceAll("[^a-z]+", "");
         }
 
-        if (ruleLookup.equals("<adjective>"))
+        if (ruleLookup.equals("adjective"))
             adjective();
-        else if (ruleLookup.equals("<noun>"))
+        else if (ruleLookup.equals("noun"))
             noun();
-        else if (ruleLookup.equals("<pronoun>"))
+        else if (ruleLookup.equals("pronoun"))
             pronoun();
-        else if (ruleLookup.equals("<verb>"))
+        else if (ruleLookup.equals("verb"))
             verb();
-        else if (ruleLookup.equals("<preposition>"))
+        else if (ruleLookup.equals("preposition"))
             preposition();
-        else if (ruleLookup.equals("$linebreak"))
+        else if (ruleLookup.equals("linebreak"))
             System.out.print("\r");
         else
             System.out.print("\n");
